@@ -13,7 +13,8 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-scripts": "3.4.3",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "wavesurfer.js": "^4.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,5 +36,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/wavesurfer": "git+https://github.com/d10221/wavesurfer-typescript.git",
+    "@types/wavesurfer.js": "^3.3.1"
   }
 }
