@@ -6,7 +6,8 @@ import RegionsPlugin from "../node_modules/wavesurfer.js/dist/plugin/wavesurfer.
 // import sample from "./garoto.mp3"
 import Controls from "./components/controls/Controls"
 import { SampleTimesObject } from "./types"
-import { Hooks } from "html-webpack-plugin"
+import SampleContainer from './components/sampleContainer/SampleContainer'
+
 
 const App: React.FC = () => {
 	const waveFormRef = useRef<any>(null)
@@ -57,25 +58,28 @@ const App: React.FC = () => {
 		wavesurfer.current.play(start, end)
 	}, [sampleTimes])
 
-	const updateSampleDuration = useCallback(() => {
-		let start
-		let end
-		for (let id in wavesurfer.current.regions.list) {
-			start = wavesurfer.current.regions.list[id].start
-			end = wavesurfer.current.regions.list[id].end
-			setSampleTimes({
-				start,
-				end,
-			})
-		}
-	}, [setSampleTimes])
-	//whenever a region is updated, update the start and end times of the region
+  //whenever a region is updated, update the start and end times of the region
 	useEffect(() => {
-		wavesurfer.current.on("region-updated", () => {
-			updateSampleDuration()
-			// console.log(wavesurfer.current.regions.list)
+		wavesurfer.current.on("region-updated", (region) => {
+			setSampleTimes({start: region.start, end: region.end})
 		})
-	})
+	}, [setSampleTimes])
+
+	const [allSampleData, setAllSampleData] = useState<any[]>([])
+	const length = useRef<number>(0)
+	useEffect(()=> {
+		length.current = allSampleData.length
+	}, [allSampleData])
+	useEffect(()=> {
+		mediaRecorder?.addEventListener("dataavailable", e => {	
+			const sampleObject = {
+				sampleSrc: URL.createObjectURL(e.data),
+				name: `sample ${length.current}`,
+				id: length.current
+			}
+			setAllSampleData(previousData => [...previousData, sampleObject])
+		})
+	}, [mediaRecorder, setAllSampleData])
 
 	const startRecording = useCallback(() => {
 		console.log("recording started")
@@ -101,6 +105,8 @@ const App: React.FC = () => {
 				stopSelectedAudio={stopSelectedAudio}
 				startRecording={startRecording}
 			/>
+      		<SampleContainer allSampleData={allSampleData} />
+
 		</>
 	)
 }
