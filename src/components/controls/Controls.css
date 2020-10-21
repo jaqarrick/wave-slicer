@@ -1,0 +1,9 @@
+.controls-container {
+	width: 500px;
+	display: flex;
+	height: 40px;
+}
+
+.controls-container > button {
+	cursor: pointer;
+}
