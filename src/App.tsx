@@ -37,20 +37,19 @@ const App: React.FC = () => {
 		gainNode.connect(streamDestination)
 		wavesurfer.current.backend.setFilter(gainNode)
 		setMediaRecorder(new MediaRecorder(streamDestination.stream))
-		wavesurfer.current.load(
-			"https://res.cloudinary.com/dcttcffbc/video/upload/v1602866271/samples/gosh.m4a"
-		)
+		wavesurfer.current.load("./NOISE.wav")
+		wavesurfer.current.on("ready", () => wavesurfer.current.play())
 	}, [])
 
 	const playSelectedAudio = useCallback(() => {
 		// Look at this later and see if theres a better solution
-		let start
-		let end
-		for (let id in wavesurfer.current.regions.list) {
-			start = wavesurfer.current.regions.list[id].start
-			end = wavesurfer.current.regions.list[id].end
-		}
-		wavesurfer.current.play(start, end)
+		// let start
+		// let end
+		// for (let id in wavesurfer.current.regions.list) {
+		// 	start = wavesurfer.current.regions.list[id].start
+		// 	end = wavesurfer.current.regions.list[id].end
+		// }
+		// wavesurfer.current.play(start, end)
 	}, [])
 
 	const stopSelectedAudio = useCallback(() => {
