@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from "react"
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from "uuid"
 import "./App.css"
 import * as WaveSurfer from "../node_modules/wavesurfer.js/dist/wavesurfer"
 import RegionsPlugin from "../node_modules/wavesurfer.js/dist/plugin/wavesurfer.regions"
 //@ts-ignore
 // import sample from "./garoto.mp3"
 import Controls from "./components/controls/Controls"
-import { SampleTimesObject } from "./types"
-import SampleContainer from './components/sampleContainer/SampleContainer'
-
+import { SampleTimesObject, SampleData } from "./types"
+import SampleContainer from "./components/sampleContainer/SampleContainer"
 
 const App: React.FC = () => {
 	const waveFormRef = useRef<any>(null)
@@ -16,7 +15,7 @@ const App: React.FC = () => {
 	const wavesurfer = useRef<any>(null)
 	const [mediaRecorder, setMediaRecorder] = useState<null | MediaRecorder>(null)
 	const [isMouseOverRegion, setIsMouseOverRegion] = useState<Boolean>(false)
-	
+
 	//Initial App Render: setup wavesurfer object and connect ac backend to Media Recorder
 	useEffect(() => {
 		wavesurfer.current = WaveSurfer.create({
@@ -61,10 +60,10 @@ const App: React.FC = () => {
 		wavesurfer.current.play(start, end)
 	}, [sampleTimes])
 
-  //whenever a region is updated, update the start and end times of the region
+	//whenever a region is updated, update the start and end times of the region
 	useEffect(() => {
-		wavesurfer.current.on("region-updated", (region) => {
-			setSampleTimes({start: region.start, end: region.end})
+		wavesurfer.current.on("region-updated", region => {
+			setSampleTimes({ start: region.start, end: region.end })
 		})
 	}, [setSampleTimes])
 
@@ -72,46 +71,59 @@ const App: React.FC = () => {
 		wavesurfer.current.on("region-mouseenter", () => {
 			setIsMouseOverRegion(true)
 		})
-		wavesurfer.current.on('region-mouseleave', () => {
+		wavesurfer.current.on("region-mouseleave", () => {
 			setIsMouseOverRegion(false)
 		})
 	}, [setIsMouseOverRegion])
 
-
-	
-	const [allSampleData, setAllSampleData] = useState<any[]>([])
+	const [allSampleData, setAllSampleData] = useState<SampleData[]>([])
 	const length = useRef<number>(0)
-	useEffect(()=> {
+	useEffect(() => {
 		length.current = allSampleData.length
 	}, [allSampleData])
 
-	const createSampleObject = useCallback((e) => {
-		const sampleObject = {
-			sampleSrc: URL.createObjectURL(e.data),
-			name: `sample ${length.current}`,
-			id: uuidv4()
-		}
-		setAllSampleData(previousData => [...previousData, sampleObject])
-	}, [setAllSampleData])
+	const createSampleObject = useCallback(
+		e => {
+			const sampleObject = {
+				sampleSrc: URL.createObjectURL(e.data),
+				name: `sample ${length.current}`,
+				id: uuidv4(),
+			}
+			setAllSampleData(previousData => [...previousData, sampleObject])
+		},
+		[setAllSampleData]
+	)
 
-	useEffect(()=> mediaRecorder?.addEventListener("dataavailable", createSampleObject), 
-		[mediaRecorder, createSampleObject])
+	useEffect(
+		() => mediaRecorder?.addEventListener("dataavailable", createSampleObject),
+		[mediaRecorder, createSampleObject]
+	)
 
-
-	const updateSampleName = useCallback((name, id) => {
-		// const currentSampleObject = allSampleData.find(({id}) => id === id)
-		// console.log(currentSampleObject)
-		const newSampleData = allSampleData.map((item) => {
-				if(id === item.id) {
+	const updateSampleName = useCallback(
+		(name, id) => {
+			// const currentSampleObject = allSampleData.find(({id}) => id === id)
+			// console.log(currentSampleObject)
+			const newSampleData = allSampleData.map(item => {
+				if (id === item.id) {
 					item.name = name
-				} 
+				}
 				return item
-		})
-		console.log(newSampleData)
-		
-		setAllSampleData(newSampleData)
-	},[allSampleData])
-	
+			})
+			console.log(newSampleData)
+
+			setAllSampleData(newSampleData)
+		},
+		[allSampleData]
+	)
+
+	const removeSample = useCallback(
+		(sampleId: string) =>
+			setAllSampleData(
+				allSampleData.filter((object: SampleData) => object.id !== sampleId)
+			),
+		[allSampleData, setAllSampleData]
+	)
+
 	const startRecording = useCallback(() => {
 		console.log("recording started")
 		playSelectedAudio()
@@ -127,33 +139,42 @@ const App: React.FC = () => {
 			wavesurfer.current?.stop()
 		}
 	}, [])
-	
-	
-	const handleDrop = useCallback((e) => {
+
+	const handleDrop = useCallback(e => {
 		e.preventDefault()
 		const fileURL = URL.createObjectURL(e.dataTransfer.items[0].getAsFile())
 		console.log(fileURL)
 		wavesurfer.current.load(fileURL)
 		wavesurfer.current.regions.clear()
-	},[])
+	}, [])
 
 	const handleWaveformClick = useCallback(() => {
-		if(isMouseOverRegion === false) {
+		if (isMouseOverRegion === false) {
 			wavesurfer.current.regions.clear()
 		}
 	}, [isMouseOverRegion])
 
 	return (
 		<>
-			<div onMouseDown={handleWaveformClick} ref={waveFormRef}> Wave Sampler </div>
-			<div ref={dropZoneRef} onDrop={(e) => handleDrop(e)} onDragOver={(e) => e.preventDefault()} className="dropzone"></div>
+			<div onMouseDown={handleWaveformClick} ref={waveFormRef}>
+				{" "}
+				Wave Sampler{" "}
+			</div>
+			<div
+				ref={dropZoneRef}
+				onDrop={e => handleDrop(e)}
+				onDragOver={e => e.preventDefault()}
+				className='dropzone'></div>
 			<Controls
 				playSelectedAudio={playSelectedAudio}
 				stopSelectedAudio={stopSelectedAudio}
 				startRecording={startRecording}
 			/>
-      		<SampleContainer allSampleData={allSampleData} updateSampleName={updateSampleName} />
-
+			<SampleContainer
+				allSampleData={allSampleData}
+				updateSampleName={updateSampleName}
+				removeSample={removeSample}
+			/>
 		</>
 	)
 }
