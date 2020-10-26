@@ -15,6 +15,7 @@ const App: React.FC = () => {
 	const wavesurfer = useRef<any>(null)
 	const [mediaRecorder, setMediaRecorder] = useState<null | MediaRecorder>(null)
 	const [isMouseOverRegion, setIsMouseOverRegion] = useState<Boolean>(false)
+	const [zoomValue, setZoomValue] = useState<number>(20)
 
 	//Initial App Render: setup wavesurfer object and connect ac backend to Media Recorder
 	useEffect(() => {
@@ -43,7 +44,44 @@ const App: React.FC = () => {
 		gainNode.connect(streamDestination)
 		wavesurfer.current.backend.setFilter(gainNode)
 		setMediaRecorder(new MediaRecorder(streamDestination.stream))
+		console.log(wavesurfer.current)
 	}, [])
+
+
+
+	// const handleZoom = useCallback((e) => {
+	// 	if(e.deltaY > 10 || e.deltaY < -10) {
+	// 		e.preventDefault()
+	// 		setZoomValue((oldValue) => {
+	// 			const newZoomValue = oldValue += e.deltaY * -0.20
+	// 			return Math.min(Math.max(20, Math.ceil(newZoomValue)), 1000)
+	// 		})
+	// 	}	
+	// }, [setZoomValue])
+
+	const handleZoom = useCallback((e) => {
+		setZoomValue(e.target.value)
+	}, [setZoomValue])
+
+	// useEffect(() => {
+	// 	waveFormRef.current.addEventListener('wheel', (e) => {
+	// 		if(e.deltaY > 10 || e.deltaY < -10) {
+	// 			e.preventDefault()
+	// 			setZoomValue((oldValue) => {
+	// 				const newZoomValue = oldValue += e.deltaY * -0.20
+	// 				return Math.min(Math.max(20, Math.ceil(newZoomValue)), 1000)
+	// 			})	
+	// 		}
+	// 	})
+	// }, [setZoomValue])
+
+
+
+	useEffect(() => {
+
+		wavesurfer.current.zoom(zoomValue)
+		// console.log(zoomValue)
+	}, [zoomValue])
 
 	const [sampleTimes, setSampleTimes] = useState<SampleTimesObject>({
 		start: 0,
@@ -81,7 +119,7 @@ const App: React.FC = () => {
 	useEffect(() => {
 		length.current = allSampleData.length
 	}, [allSampleData])
-
+	
 	const createSampleObject = useCallback(
 		e => {
 			const sampleObject = {
@@ -160,6 +198,7 @@ const App: React.FC = () => {
 				{" "}
 				Wave Sampler{" "}
 			</div>
+			<input type="range" min="20" max="1000" value={zoomValue} step='10' onInput={handleZoom} />
 			<div
 				ref={dropZoneRef}
 				onDrop={e => handleDrop(e)}
