@@ -18,6 +18,7 @@ import SampleContainer from "./components/sampleContainer/SampleContainer";
 import { Global, css } from "@emotion/core";
 import emotionNormalize from "emotion-normalize";
 import WaveformWrapper from "./components/waveformWrapper/WaveformWrapper";
+import { GlobalStyles } from "./utils/style";
 
 const App: React.FC = () => {
   // const waveFormRef = useRef<HTMLDivElement | null>(null)
@@ -27,35 +28,23 @@ const App: React.FC = () => {
   );
   const [isMouseOverRegion, setIsMouseOverRegion] = useState<Boolean>(false);
   const [zoomValue, setZoomValue] = useState<number>(20);
+  const [isWavesurferPlaying, setIsWaveSurferPlaying] = useState<Boolean>(
+    false
+  );
 
-  //Initial App Render: setup wavesurfer object and connect ac backend to Media Recorder
-  // useEffect(() => {
-  // 	wavesurfer.current = WaveSurfer.create({
-  // 		container: waveFormRef.current,
-  // 		waveColor: "violet",
-  // 		progressColor: "purple",
-  // 		backend: "MediaElementWebAudio",
-  // 		plugins: [
-  // 			RegionsPlugin.create({
-  // 				regionsMinLength: 0,
-  // 				maxRegions: 1,
-  // 				regions: [],
-  // 				dragSelection: {
-  // 					slop: 1,
-  // 				},
-  // 			}),
-  // 		],
-  // 	})
-  // 	// Creates a mediastream for mediaRecorder
-  // 	const streamDestination: MediaStreamAudioDestinationNode = wavesurfer.current.backend.ac.createMediaStreamDestination()
-  // 	wavesurfer.current.load("./NOISE.wav")
-  // 	// Creates a gainNode to use as a wavesurfer filter (just needs to be something for the audio to pass through)
-  // 	const gainNode: GainNode = wavesurfer.current.backend.ac.createGain()
-  // 	// Connects gain node to the audio stream
-  // 	gainNode.connect(streamDestination)
-  // 	wavesurfer.current.backend.setFilter(gainNode)
-  // 	setMediaRecorder(new MediaRecorder(streamDestination.stream))
-  // }, [])
+  useEffect(() => {
+    if (wavesurfer.current) {
+      wavesurfer.current.on("play", () => {
+        setIsWaveSurferPlaying(true);
+      });
+      wavesurfer.current.on("region-out", () => {
+        setIsWaveSurferPlaying(false);
+      });
+      wavesurfer.current.on("finish", () => {
+        setIsWaveSurferPlaying(false);
+      });
+    }
+  }, [setIsWaveSurferPlaying]);
 
   const initWavesurfer = useCallback(
     (waveformRef: React.RefObject<HTMLDivElement>) => {
@@ -216,6 +205,7 @@ const App: React.FC = () => {
   const stopSelectedAudio = useCallback(() => {
     if (wavesurfer.current) {
       wavesurfer.current?.stop();
+      setIsWaveSurferPlaying(false);
     }
   }, []);
 
@@ -236,19 +226,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Global
-        styles={css`
-          ${emotionNormalize}
-          html {
-            box-sizing: border-box;
-          }
-          *,
-          *:before,
-          *:after {
-            box-sizing: inherit;
-          }
-        `}
-      />
+      <GlobalStyles />
       <WaveformWrapper
         initWavesurfer={initWavesurfer}
         handleWaveformClick={handleWaveformClick}
@@ -261,6 +239,7 @@ const App: React.FC = () => {
         playSelectedAudio={playSelectedAudio}
         stopSelectedAudio={stopSelectedAudio}
         startRecording={startRecording}
+        isWavesurferPlaying={isWavesurferPlaying}
       />
       <SampleContainer
         allSampleData={allSampleData}
