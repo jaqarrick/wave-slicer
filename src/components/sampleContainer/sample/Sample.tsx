@@ -11,25 +11,52 @@ interface Props {
 }
 
 const SampleFileContainer = styled.div`
+  position: relative;
   display: flex;
-  width: 33%;
-  height: 71px;
+  width: 27%;
+  height: 63px;
   border: 1px solid ${colors.dark};
+  margin: 3%;
+  box-sizing: content-box;
+  overflow: hidden;
 `;
 
 const SampleNameInput = styled.input`
   height: 100%;
-  flex-grow: 0;
+  border: 0;
+  padding: 0;
+  font-size: 25px;
+`;
+
+const SampleNameInputContainer = styled.div`
+  margin: 0;
+  height: 63px;
+  display: inline-block;
+  padding: 0;
+  margin: 0 65px;
 `;
 
 const SamplePlayButton = styled.button`
+  position: absolute;
+  left: 0;
   flex-grow: 1;
+  margin: 0;
+  border: none;
+  padding: 0;
+  height: 63px;
+  width: 65px;
+  border-right: 1px solid black;
 `;
 
 const SampleRemoveButton = styled.button`
-  /* position: absolute;
-  right: 0; */
-  flex-grow: 0;
+  position: absolute;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  width: 65px;
+  height: 63px;
+  border-left: 1px solid black;
 `;
 
 const Sample: React.FC<Props> = ({
@@ -72,12 +99,12 @@ const Sample: React.FC<Props> = ({
             <path
               d="M15.7333 35V1H23.6667V35H15.7333Z"
               stroke="black"
-              stroke-width="0.566667"
+              strokeWidth="0.566667"
             />
             <path
               d="M9.21667 35V1H1V35H9.21667Z"
               stroke="black"
-              stroke-width="0.566667"
+              strokeWidth="0.566667"
             />
           </svg>
         ) : (
@@ -92,7 +119,7 @@ const Sample: React.FC<Props> = ({
               d="M1.05566 34.2778L28.1516 17.6643L1.05566 1.32324V34.2778Z"
               fill="#474468"
               stroke="#474468"
-              stroke-width="0.740773"
+              strokeWidth="0.740773"
             />
           </svg>
         )}
@@ -101,13 +128,16 @@ const Sample: React.FC<Props> = ({
       {/* <a href={sampleSrc} download={`${name}.wav`}>
         download
       </a> */}
-      <SampleNameInput
-        type="text"
-        value={name}
-        onChange={(event: { target: HTMLInputElement }) =>
-          updateSampleName(event.target.value, sampleId)
-        }
-      ></SampleNameInput>
+      <SampleNameInputContainer>
+        <SampleNameInput
+          type="text"
+          value={name}
+          onChange={(event: { target: HTMLInputElement }) =>
+            updateSampleName(event.target.value, sampleId)
+          }
+        ></SampleNameInput>
+      </SampleNameInputContainer>
+
       <SampleRemoveButton onClick={() => removeSample(sampleId)}>
         {" "}
         <svg
@@ -120,7 +150,7 @@ const Sample: React.FC<Props> = ({
           <path
             d="M35 1L1 35M1 1L35 35"
             stroke="#474468"
-            stroke-width="2.75676"
+            strokeWidth="2.75676"
           />
         </svg>
       </SampleRemoveButton>

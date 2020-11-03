@@ -16,6 +16,8 @@ export const GlobalStyles = (props) => (
       html {
         box-sizing: border-box;
         background-color: ${colors.light};
+        font-family: "JostMedium";
+        font-weight: medium;
       }
       *,
       *:before,
