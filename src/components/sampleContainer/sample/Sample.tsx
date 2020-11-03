@@ -50,6 +50,11 @@ const SamplePlayButton = styled.button`
   width: 65px;
   background-color: ${colors.light};
   cursor: pointer;
+
+  path {
+    fill: ${colors.dark};
+    stroke: ${colors.dark};
+  }
 `;
 
 const SampleRemoveButton = styled.button`
