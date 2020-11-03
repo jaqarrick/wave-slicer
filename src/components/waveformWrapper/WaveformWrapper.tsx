@@ -14,6 +14,11 @@ interface Props {
   handleDrop: (e: any) => void;
 }
 
+const InputContainer = styled.div`
+  margin-top: 10px;
+  width: 387px;
+`;
+
 const WaveformWrapper: React.FC<Props> = ({
   initWavesurfer,
   handleWaveformClick,
@@ -32,15 +37,17 @@ const WaveformWrapper: React.FC<Props> = ({
   return (
     <>
       <WaveFormContainer onMouseDown={handleWaveformClick} ref={waveformRef} />
+      <InputContainer>
+        <input
+          type="range"
+          min="20"
+          max="1000"
+          value={zoomValue}
+          step="10"
+          onInput={handleZoom}
+        />
+      </InputContainer>
 
-      <input
-        type="range"
-        min="20"
-        max="1000"
-        value={zoomValue}
-        step="10"
-        onInput={handleZoom}
-      />
       <div
         ref={dropZoneRef}
         onDrop={(e) => handleDrop(e)}
