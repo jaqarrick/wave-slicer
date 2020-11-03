@@ -19,6 +19,7 @@ const SampleFileContainer = styled.div`
   margin: 3%;
   box-sizing: content-box;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const SampleNameInput = styled.input`
@@ -26,6 +27,8 @@ const SampleNameInput = styled.input`
   border: 0;
   padding: 0;
   font-size: 25px;
+  background-color: ${colors.light};
+  cursor: text;
 `;
 
 const SampleNameInputContainer = styled.div`
@@ -45,7 +48,8 @@ const SamplePlayButton = styled.button`
   padding: 0;
   height: 63px;
   width: 65px;
-  border-right: 1px solid black;
+  background-color: ${colors.light};
+  cursor: pointer;
 `;
 
 const SampleRemoveButton = styled.button`
@@ -57,6 +61,8 @@ const SampleRemoveButton = styled.button`
   width: 65px;
   height: 63px;
   border-left: 1px solid black;
+  background-color: ${colors.light};
+  cursor: pointer;
 `;
 
 const Sample: React.FC<Props> = ({

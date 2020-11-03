@@ -19,6 +19,7 @@ import { Global, css } from "@emotion/core";
 import emotionNormalize from "emotion-normalize";
 import WaveformWrapper from "./components/waveformWrapper/WaveformWrapper";
 import { GlobalStyles } from "./utils/style";
+import { colors } from "./utils/style";
 
 const App: React.FC = () => {
   // const waveFormRef = useRef<HTMLDivElement | null>(null)
@@ -50,13 +51,14 @@ const App: React.FC = () => {
     (waveformRef: React.RefObject<HTMLDivElement>) => {
       wavesurfer.current = WaveSurfer.create({
         container: waveformRef.current,
-        waveColor: "violet",
-        progressColor: "purple",
+        waveColor: colors.light,
+        progressColor: "#C0BCE4",
         backend: "MediaElementWebAudio",
         plugins: [
           RegionsPlugin.create({
             regionsMinLength: 0,
             maxRegions: 1,
+            color: "rgb(192, 188, 228, 0.3)",
             regions: [],
             dragSelection: {
               slop: 1,

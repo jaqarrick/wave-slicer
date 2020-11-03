@@ -1,14 +1,16 @@
 import styled from "@emotion/styled";
 import React from "react";
 import Sample from "./sample/Sample";
+import { colors } from "../../utils/style";
 
 const SampleContainerWrapper = styled.div`
   width: 100%;
-  height: 30vh;
+  height: 55vh;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   overflow: scroll;
+  border-top: 3px dashed ${colors.dark};
 `;
 
 interface Props {

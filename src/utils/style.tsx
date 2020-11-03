@@ -28,6 +28,7 @@ export const GlobalStyles = (props) => (
         height: 100vh;
         max-width: 1100px;
         margin: auto;
+        overflow: hidden;
       }
     `}
   />
