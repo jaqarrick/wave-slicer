@@ -182,15 +182,30 @@ const App: React.FC = () => {
     [allSampleData, setAllSampleData]
   );
 
+  const [hasRecordingStarted, setHasRecordingStarted] = useState<boolean>(
+    false
+  );
   const startRecording = useCallback(() => {
-    console.log("recording started");
-    playSelectedAudio();
-    console.log(sampleDuration);
-    if (mediaRecorder) {
-      mediaRecorder.start();
-      setTimeout(() => mediaRecorder.stop(), sampleDuration * 1000);
+    if (!hasRecordingStarted) {
+      console.log("recording started");
+      playSelectedAudio();
+      console.log(sampleDuration);
+      setHasRecordingStarted(true);
+      if (mediaRecorder) {
+        mediaRecorder.start();
+        setTimeout(() => {
+          mediaRecorder.stop();
+          setHasRecordingStarted(false);
+        }, sampleDuration * 1000);
+      }
     }
-  }, [sampleDuration, playSelectedAudio, mediaRecorder]);
+  }, [
+    sampleDuration,
+    playSelectedAudio,
+    mediaRecorder,
+    hasRecordingStarted,
+    setHasRecordingStarted,
+  ]);
 
   const stopSelectedAudio = useCallback(() => {
     if (wavesurfer.current) {
@@ -257,7 +272,7 @@ const App: React.FC = () => {
             <path
               d="M20.2392 0V42.2562M20.2392 42.2562L35.4666 19.0343M20.2392 42.2562L5.01172 19.0343M38 51L35.4666 54.5H5.01172L2 51"
               stroke="#474468"
-              stroke-width="3.04549"
+              strokeWidth="3.04549"
             />
           </svg>
         </DownloadButton>
