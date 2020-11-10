@@ -15,15 +15,23 @@ import RegionsPlugin from "../node_modules/wavesurfer.js/dist/plugin/wavesurfer.
 import Controls from "./components/controls/Controls";
 import { SampleTimesObject, SampleData } from "./types";
 import SampleContainer from "./components/sampleContainer/SampleContainer";
-import { Global, css } from "@emotion/core";
-import emotionNormalize from "emotion-normalize";
 import WaveformWrapper from "./components/waveformWrapper/WaveformWrapper";
 import { GlobalStyles } from "./utils/style";
 import { colors } from "./utils/style";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { resolve } from "url";
+import styled from "@emotion/styled";
 
+const DownloadButton = styled.button`
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  background: ${colors.light};
+  border: none;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+`;
 const App: React.FC = () => {
   // const waveFormRef = useRef<HTMLDivElement | null>(null)
   const wavesurfer = useRef<any>(null);
@@ -81,17 +89,6 @@ const App: React.FC = () => {
     },
     [setMediaRecorder]
   );
-
-  // OLD ZOOM
-  // const handleZoom = useCallback((e) => {
-  // 	if(e.deltaY > 10 || e.deltaY < -10) {
-  // 		e.preventDefault()
-  // 		setZoomValue((oldValue) => {
-  // 			const newZoomValue = oldValue += e.deltaY * -0.20
-  // 			return Math.min(Math.max(20, Math.ceil(newZoomValue)), 1000)
-  // 		})
-  // 	}
-  // }, [setZoomValue])
 
   const handleZoom = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,7 +245,25 @@ const App: React.FC = () => {
         startRecording={startRecording}
         isWavesurferPlaying={isWavesurferPlaying}
       />
-      <button onClick={downloadSamples}>Download</button>
+      {allSampleData.length > 0 ? (
+        <DownloadButton onClick={downloadSamples}>
+          <svg
+            width="40"
+            height="57"
+            viewBox="0 0 40 57"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.2392 0V42.2562M20.2392 42.2562L35.4666 19.0343M20.2392 42.2562L5.01172 19.0343M38 51L35.4666 54.5H5.01172L2 51"
+              stroke="#474468"
+              stroke-width="3.04549"
+            />
+          </svg>
+        </DownloadButton>
+      ) : (
+        ""
+      )}
       <SampleContainer
         allSampleData={allSampleData}
         updateSampleName={updateSampleName}
