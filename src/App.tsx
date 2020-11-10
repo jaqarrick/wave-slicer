@@ -20,6 +20,9 @@ import emotionNormalize from "emotion-normalize";
 import WaveformWrapper from "./components/waveformWrapper/WaveformWrapper";
 import { GlobalStyles } from "./utils/style";
 import { colors } from "./utils/style";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import { resolve } from "url";
 
 const App: React.FC = () => {
   // const waveFormRef = useRef<HTMLDivElement | null>(null)
@@ -97,19 +100,6 @@ const App: React.FC = () => {
     [setZoomValue]
   );
 
-  //OLD ZOOM
-  // useEffect(() => {
-  // 	waveFormRef.current.addEventListener('wheel', (e) => {
-  // 		if(e.deltaY > 10 || e.deltaY < -10) {
-  // 			e.preventDefault()
-  // 			setZoomValue((oldValue) => {
-  // 				const newZoomValue = oldValue += e.deltaY * -0.20
-  // 				return Math.min(Math.max(20, Math.ceil(newZoomValue)), 1000)
-  // 			})
-  // 		}
-  // 	})
-  // }, [setZoomValue])
-
   useEffect(() => {
     wavesurfer.current.zoom(zoomValue);
     // console.log(zoomValue)
@@ -156,8 +146,9 @@ const App: React.FC = () => {
     (e) => {
       const sampleObject = {
         sampleSrc: URL.createObjectURL(e.data),
-        name: `sample ${length.current}`,
+        name: `sample${length.current}`,
         id: uuidv4(),
+        sampleBlob: e.data,
       };
       setAllSampleData((previousData) => [...previousData, sampleObject]);
     },
@@ -226,6 +217,20 @@ const App: React.FC = () => {
     }
   }, [isMouseOverRegion]);
 
+  const downloadSamples = useCallback(() => {
+    console.log("download samples");
+    const zip = new JSZip();
+    allSampleData.forEach((sample: SampleData) => {
+      console.log(sample.sampleBlob);
+
+      zip.file(`${sample.name}.wav`, sample.sampleBlob);
+    });
+    zip.generateAsync({ type: "blob" }).then(function (blob) {
+      saveAs(blob, "samples.zip");
+      console.log(blob);
+    });
+  }, [allSampleData]);
+
   return (
     <>
       <GlobalStyles />
@@ -243,6 +248,7 @@ const App: React.FC = () => {
         startRecording={startRecording}
         isWavesurferPlaying={isWavesurferPlaying}
       />
+      <button onClick={downloadSamples}>Download</button>
       <SampleContainer
         allSampleData={allSampleData}
         updateSampleName={updateSampleName}

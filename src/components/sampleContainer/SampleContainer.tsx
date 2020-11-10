@@ -5,11 +5,11 @@ import { colors } from "../../utils/style";
 
 const SampleContainerWrapper = styled.div`
   width: 100%;
-  height: 55vh;
+  height: 60vh;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  overflow: scroll;
+  overflow: auto;
   border-top: 3px dashed ${colors.dark};
 `;
 

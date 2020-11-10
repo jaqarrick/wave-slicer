@@ -59,25 +59,28 @@ export const GlobalStyles = (props) => (
         -webkit-appearance: none;
         height: 30px;
         width: 30px;
-        background: #ffffff;
+        background: ${colors.light};
         cursor: pointer;
-        margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+        border-radius: none;
+        margin-top: 2px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
       }
 
       /* All the same stuff for Firefox */
       input[type="range"]::-moz-range-thumb {
         height: 30px;
         width: 30px;
-        background: #ffffff;
+        background: ${colors.light};
         cursor: pointer;
+        border-radius: none;
       }
 
       /* All the same stuff for IE */
       input[type="range"]::-ms-thumb {
         height: 30px;
         width: 30px;
-        background: #ffffff;
+        background: ${colors.light};
         cursor: pointer;
+        border-radius: none;
       }
 
       input[type="range"]::-webkit-slider-runnable-track {
@@ -85,10 +88,14 @@ export const GlobalStyles = (props) => (
         height: 34px;
         cursor: pointer;
         background: ${colors.dark};
+        border-right: solid 2px ${colors.dark};
+        border-left: solid 2px ${colors.dark};
       }
 
       input[type="range"]:focus::-webkit-slider-runnable-track {
         background: ${colors.dark};
+        border-right: solid 2px ${colors.dark};
+        border-left: solid 2px ${colors.dark};
       }
 
       input[type="range"]::-moz-range-track {
@@ -96,6 +103,9 @@ export const GlobalStyles = (props) => (
         height: 34px;
         cursor: pointer;
         background: ${colors.dark};
+        border-right: solid 2px ${colors.dark};
+        border-left: solid 2px ${colors.dark};
+        box-sizing: border-box;
       }
 
       input[type="range"]::-ms-track {

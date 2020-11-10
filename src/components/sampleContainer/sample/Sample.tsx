@@ -13,9 +13,10 @@ interface Props {
 const SampleFileContainer = styled.div`
   position: relative;
   display: flex;
-  width: 27%;
+  width: 26%;
   height: 63px;
-  border: 1px solid ${colors.dark};
+  border: 3px solid ${colors.dark};
+
   margin: 3%;
   box-sizing: content-box;
   overflow: hidden;
@@ -29,6 +30,7 @@ const SampleNameInput = styled.input`
   font-size: 25px;
   background-color: ${colors.light};
   cursor: text;
+  color: ${colors.dark};
 `;
 
 const SampleNameInputContainer = styled.div`
@@ -65,7 +67,7 @@ const SampleRemoveButton = styled.button`
   border: none;
   width: 65px;
   height: 63px;
-  border-left: 1px solid black;
+  border-left: 3px solid ${colors.dark};
   background-color: ${colors.light};
   cursor: pointer;
 `;
