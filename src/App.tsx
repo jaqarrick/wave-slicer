@@ -21,6 +21,7 @@ import { colors } from "./utils/style";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import styled from "@emotion/styled";
+import { debounce } from "lodash";
 
 const DownloadButton = styled.button`
   position: fixed;
@@ -43,6 +44,7 @@ const App: React.FC = () => {
   const [isWavesurferPlaying, setIsWaveSurferPlaying] = useState<Boolean>(
     false
   );
+  const [wavesurferReady, setWavesurferReady] = useState<boolean>(false);
 
   useEffect(() => {
     if (wavesurfer.current) {
@@ -65,6 +67,8 @@ const App: React.FC = () => {
         waveColor: colors.light,
         progressColor: "#C0BCE4",
         backend: "MediaElementWebAudio",
+        pixelRatio: 1,
+        minPxPerSec: 25,
         plugins: [
           RegionsPlugin.create({
             regionsMinLength: 0,
@@ -79,7 +83,7 @@ const App: React.FC = () => {
       });
       // Creates a mediastream for mediaRecorder
       const streamDestination: MediaStreamAudioDestinationNode = wavesurfer.current.backend.ac.createMediaStreamDestination();
-      wavesurfer.current.load("./NOISE.wav");
+      // wavesurfer.current.load("./NOISE.wav");
       // Creates a gainNode to use as a wavesurfer filter (just needs to be something for the audio to pass through)
       const gainNode: GainNode = wavesurfer.current.backend.ac.createGain();
       // Connects gain node to the audio stream
@@ -92,15 +96,26 @@ const App: React.FC = () => {
 
   const handleZoom = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      // console.log(zoomValue);
+      // console.log("change");
       setZoomValue(Number(e.target.value));
     },
-    [setZoomValue]
+    [setZoomValue, zoomValue]
   );
 
   useEffect(() => {
-    wavesurfer.current.zoom(zoomValue);
+    console.log(zoomValue);
+    // debounceZoom(zoomValue);
     // console.log(zoomValue)
+    wavesurfer.current.zoom(zoomValue);
   }, [zoomValue]);
+
+  // const debounceZoom = useCallback((zoomValue) => {
+  //   debounce(() => {
+  //     console.log("input");
+  //     wavesurfer.current.zoom(zoomValue);
+  //   }, 30);
+  // }, []);
 
   const [sampleTimes, setSampleTimes] = useState<SampleTimesObject>({
     start: 0,
@@ -214,14 +229,18 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const handleDrop = useCallback((e) => {
-    console.log("handleDrop");
-    e.preventDefault();
-    const fileURL = URL.createObjectURL(e.dataTransfer.items[0].getAsFile());
-    console.log(fileURL);
-    wavesurfer.current.load(fileURL);
-    wavesurfer.current.regions.clear();
-  }, []);
+  const handleDrop = useCallback(
+    (e) => {
+      console.log("handleDrop");
+      e.preventDefault();
+      const fileURL = URL.createObjectURL(e.dataTransfer.items[0].getAsFile());
+      console.log(fileURL);
+      wavesurfer.current.load(fileURL);
+      wavesurfer.current.regions.clear();
+      setWavesurferReady(true);
+    },
+    [setWavesurferReady]
+  );
 
   const handleWaveformClick = useCallback(() => {
     if (isMouseOverRegion === false) {
@@ -252,6 +271,7 @@ const App: React.FC = () => {
         handleZoom={handleZoom}
         zoomValue={zoomValue}
         handleDrop={handleDrop}
+        wavesurferReady={wavesurferReady}
       />
 
       <Controls

@@ -10,7 +10,7 @@ const SampleContainerWrapper = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   overflow: auto;
-  border-top: 3px dashed ${colors.dark};
+  border-top: 5px dashed ${colors.dark};
 `;
 
 interface Props {
