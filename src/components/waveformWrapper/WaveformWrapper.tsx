@@ -22,6 +22,14 @@ const DropZoneContainer = styled(WaveFormContainer)<StyledProps>`
   align-items: center;
   font-size: 2rem;
   display: ${(props) => (props.wavesurferReady ? "none" : "flex")};
+
+  span {
+    cursor: default;
+  }
+
+  :hover {
+    opacity: 0.6;
+  }
 `;
 interface Props {
   initWavesurfer: (waveformRef: React.RefObject<HTMLDivElement>) => void;
@@ -69,7 +77,7 @@ const WaveformWrapper: React.FC<Props> = ({
         onDragOver={(e) => e.preventDefault()}
         wavesurferReady={wavesurferReady}
       >
-        Drag and drop an audio file to sample
+        <span>Drag and drop an audio file to sample</span>
       </DropZoneContainer>
       <InputContainer wavesurferReady={wavesurferReady}>
         <input

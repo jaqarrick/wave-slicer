@@ -174,11 +174,9 @@ const App: React.FC = () => {
 
   const updateSampleName = useCallback(
     (name, id) => {
-      // const currentSampleObject = allSampleData.find(({id}) => id === id)
-      // console.log(currentSampleObject)
       const newSampleData = allSampleData.map((item) => {
         if (id === item.id) {
-          item.name = name;
+          item.name = name.slice(0, 10).toLowerCase();
         }
         return item;
       });

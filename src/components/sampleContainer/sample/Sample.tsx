@@ -138,9 +138,6 @@ const Sample: React.FC<Props> = ({
         )}
       </SamplePlayButton>
 
-      {/* <a href={sampleSrc} download={`${name}.wav`}>
-        download
-      </a> */}
       <SampleNameInputContainer>
         <SampleNameInput
           type="text"
