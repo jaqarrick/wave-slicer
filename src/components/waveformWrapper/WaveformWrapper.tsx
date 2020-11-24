@@ -7,7 +7,6 @@ interface StyledProps {
 }
 const WaveFormContainer = styled.div<StyledProps>`
   background-color: ${colors.dark};
-  margin-top: 50px;
   display: ${(props) => (props.wavesurferReady ? "block" : "none")};
 `;
 

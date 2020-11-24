@@ -5,12 +5,13 @@ import { colors } from "../../utils/style";
 
 const SampleContainerWrapper = styled.div`
   width: 100%;
-  height: 60vh;
+  height: 53vh;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   overflow: auto;
-  border-top: 5px dashed ${colors.dark};
+  border: 5px dashed ${colors.dark};
+  padding-bottom: 1rem;
 `;
 
 interface Props {

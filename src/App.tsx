@@ -22,6 +22,21 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import styled from "@emotion/styled";
 import { debounce } from "lodash";
+import InfoModal from "./components/infoModal/infoModal";
+
+const TitleHeader = styled.header`
+  font-family: "plasticregular";
+  font-size: 5rem;
+  padding-top: 0.7rem;
+  color: ${colors.dark};
+  display: flex;
+  justify-content: space-between;
+
+  .info-button {
+    font-family: "milestone_outlineregular";
+    cursor: pointer;
+  }
+`;
 
 const DownloadButton = styled.button`
   position: fixed;
@@ -45,6 +60,7 @@ const App: React.FC = () => {
     false
   );
   const [wavesurferReady, setWavesurferReady] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (wavesurfer.current) {
@@ -260,9 +276,22 @@ const App: React.FC = () => {
     });
   }, [allSampleData]);
 
+  const toggleModal = useCallback(() => setShowModal(!showModal), [
+    setShowModal,
+    showModal,
+  ]);
+
   return (
     <>
       <GlobalStyles />
+      {showModal ? <InfoModal toggleModal={toggleModal} /> : null}
+      <TitleHeader>
+        {" "}
+        <div>WAVE SLICER </div>{" "}
+        <div onClick={toggleModal} className="info-button">
+          ?
+        </div>{" "}
+      </TitleHeader>
       <WaveformWrapper
         initWavesurfer={initWavesurfer}
         handleWaveformClick={handleWaveformClick}
