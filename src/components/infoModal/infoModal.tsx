@@ -17,30 +17,29 @@ const ModalContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   padding: 3em;
-  border: solid;
+  color: ${colors.dark};
+  border: solid ${colors.dark} 3px;
+`;
+
+const CloseIcon = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.5em;
+  margin-top: 1px;
+  margin-right: 5px;
+  cursor: pointer;
 `;
 
 const InfoModal: React.FC<Props> = ({ toggleModal }) => {
   return (
     <ModalContainer>
-      <button onClick={toggleModal}>close</button>
+      <CloseIcon onClick={toggleModal}>X</CloseIcon>
       <p>
         Aenean non lorem nec mauris elementum finibus vel congue lorem. Aliquam
         pharetra vehicula lectus, sit amet laoreet leo convallis eget. Nunc
         mollis id ante ut mattis. Fusce dictum nunc sed gravida pharetra. Mauris
-        imperdiet consequat nunc a commodo. Suspendisse turpis neque
-      </p>
-      <p>
-        scelerisque et purus id, laoreet laoreet enim. Etiam eleifend non metus
-        ac congue. Nulla eu elit aliquam, tristique magna mattis, faucibus urna.
-        Nulla tincidunt nibh a orci lobortis pulvinar.{" "}
-      </p>
-      <p>
-        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-        inceptos himenaeos. Donec volutpat justo quis velit vestibulum lacinia.
-        Praesent eget condimentum libero. Duis porttitor, arcu et fermentum
-        viverra, nisl tellus dignissim nibh, at scelerisque metus lacus ut sem.
-        Fusce rhoncus sem non massa fringilla convallis.
+        imperdiet consequat nunc a commodo. Suspendisse turpis neque.
       </p>
     </ModalContainer>
   );

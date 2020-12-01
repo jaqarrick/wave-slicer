@@ -23,7 +23,23 @@ import { saveAs } from "file-saver";
 import styled from "@emotion/styled";
 import { debounce } from "lodash";
 import InfoModal from "./components/infoModal/infoModal";
+import MobileDeviceModal from "./components/mobileDeviceModal/mobileDeviceModal";
 
+interface WrapperProps {
+  showModal: boolean;
+}
+const Wrapper = styled.div<WrapperProps>`
+  opacity: ${({ showModal }) => (showModal ? 0.2 : 1)};
+  cursor: ${({ showModal }) => (showModal ? "pointer" : "default")};
+  height: inherit;
+  width: inherit;
+`;
+
+const InnerWrapper = styled.div`
+  max-width: 1100px;
+  height: inherit;
+  margin: auto;
+`;
 const TitleHeader = styled.header`
   font-family: "plasticregular";
   font-size: 5rem;
@@ -215,17 +231,19 @@ const App: React.FC = () => {
     false
   );
   const startRecording = useCallback(() => {
-    if (!hasRecordingStarted) {
-      console.log("recording started");
-      playSelectedAudio();
-      console.log(sampleDuration);
-      setHasRecordingStarted(true);
-      if (mediaRecorder) {
-        mediaRecorder.start();
-        setTimeout(() => {
-          mediaRecorder.stop();
-          setHasRecordingStarted(false);
-        }, sampleDuration * 1000);
+    if (wavesurfer.current.getDuration() > 0) {
+      if (!hasRecordingStarted) {
+        console.log("recording started");
+        playSelectedAudio();
+        console.log(sampleDuration);
+        setHasRecordingStarted(true);
+        if (mediaRecorder) {
+          mediaRecorder.start();
+          setTimeout(() => {
+            mediaRecorder.stop();
+            setHasRecordingStarted(false);
+          }, sampleDuration * 1000);
+        }
       }
     }
   }, [
@@ -267,7 +285,6 @@ const App: React.FC = () => {
     const zip = new JSZip();
     allSampleData.forEach((sample: SampleData) => {
       console.log(sample.sampleBlob);
-
       zip.file(`${sample.name}.wav`, sample.sampleBlob);
     });
     zip.generateAsync({ type: "blob" }).then(function (blob) {
@@ -284,53 +301,61 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyles />
+      <MobileDeviceModal />
       {showModal ? <InfoModal toggleModal={toggleModal} /> : null}
-      <TitleHeader>
-        {" "}
-        <div>WAVE SLICER </div>{" "}
-        <div onClick={toggleModal} className="info-button">
-          ?
-        </div>{" "}
-      </TitleHeader>
-      <WaveformWrapper
-        initWavesurfer={initWavesurfer}
-        handleWaveformClick={handleWaveformClick}
-        handleZoom={handleZoom}
-        zoomValue={zoomValue}
-        handleDrop={handleDrop}
-        wavesurferReady={wavesurferReady}
-      />
+      <Wrapper
+        showModal={showModal}
+        onClick={showModal ? toggleModal : undefined}
+      >
+        <InnerWrapper>
+          <TitleHeader>
+            {" "}
+            <div> WAVE SLICER </div>{" "}
+            <div onClick={toggleModal} className="info-button">
+              ?
+            </div>{" "}
+          </TitleHeader>
+          <WaveformWrapper
+            initWavesurfer={initWavesurfer}
+            handleWaveformClick={handleWaveformClick}
+            handleZoom={handleZoom}
+            zoomValue={zoomValue}
+            handleDrop={handleDrop}
+            wavesurferReady={wavesurferReady}
+          />
 
-      <Controls
-        playSelectedAudio={playSelectedAudio}
-        stopSelectedAudio={stopSelectedAudio}
-        startRecording={startRecording}
-        isWavesurferPlaying={isWavesurferPlaying}
-      />
-      {allSampleData.length > 0 ? (
-        <DownloadButton onClick={downloadSamples}>
-          <svg
-            width="40"
-            height="57"
-            viewBox="0 0 40 57"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20.2392 0V42.2562M20.2392 42.2562L35.4666 19.0343M20.2392 42.2562L5.01172 19.0343M38 51L35.4666 54.5H5.01172L2 51"
-              stroke="#474468"
-              strokeWidth="3.04549"
-            />
-          </svg>
-        </DownloadButton>
-      ) : (
-        ""
-      )}
-      <SampleContainer
-        allSampleData={allSampleData}
-        updateSampleName={updateSampleName}
-        removeSample={removeSample}
-      />
+          <Controls
+            playSelectedAudio={playSelectedAudio}
+            stopSelectedAudio={stopSelectedAudio}
+            startRecording={startRecording}
+            isWavesurferPlaying={isWavesurferPlaying}
+          />
+          {allSampleData.length > 0 ? (
+            <DownloadButton onClick={downloadSamples}>
+              <svg
+                width="40"
+                height="57"
+                viewBox="0 0 40 57"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20.2392 0V42.2562M20.2392 42.2562L35.4666 19.0343M20.2392 42.2562L5.01172 19.0343M38 51L35.4666 54.5H5.01172L2 51"
+                  stroke="#474468"
+                  strokeWidth="3.04549"
+                />
+              </svg>
+            </DownloadButton>
+          ) : (
+            ""
+          )}
+          <SampleContainer
+            allSampleData={allSampleData}
+            updateSampleName={updateSampleName}
+            removeSample={removeSample}
+          />
+        </InnerWrapper>
+      </Wrapper>
     </>
   );
 };

@@ -26,9 +26,12 @@ export const GlobalStyles = (props) => (
       }
       body {
         height: 100vh;
-        max-width: 1100px;
         margin: auto;
         overflow: hidden;
+      }
+
+      #root {
+        height: 100vh;
       }
 
       input[type="range"] {

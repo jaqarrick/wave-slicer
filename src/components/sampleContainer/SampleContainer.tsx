@@ -5,13 +5,17 @@ import { colors } from "../../utils/style";
 
 const SampleContainerWrapper = styled.div`
   width: 100%;
-  height: 53vh;
+  height: 50%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   overflow: auto;
   border: 5px dashed ${colors.dark};
   padding-bottom: 1rem;
+
+  @media (max-height: 800px) {
+    height: 40%;
+  }
 `;
 
 interface Props {
