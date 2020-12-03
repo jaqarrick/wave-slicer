@@ -47,7 +47,7 @@ const InfoModal: React.FC<Props> = ({ toggleModal }) => {
         <br />
         You can listen back to your samples or remove them. A download button
         will appear at the bottom right of the screen. <br /> <br />
-        Check out the source code <a href="#">here</a>!
+        Check out the source code <a href="https://github.com/jaqarrick/wave-slicer">here</a>!
       </p>
     </ModalContainer>
   );
