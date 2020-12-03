@@ -8,6 +8,8 @@ To get started drag an audio file onto the drop zone. To sample highlight a regi
 
 This project is built using [React](https://reactjs.org/). [Wavesurfer.js](https://wavesurfer-js.org/) is used to display the waveform and define which regions to sample. Samples are then recorded from the audio file using the [MediaRecorder API](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder).
 
+![screenshot](screenshots/screenshot.png)
+
 ## Installing Locally
 
 Clone the repo:
