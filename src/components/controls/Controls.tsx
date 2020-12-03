@@ -1,7 +1,5 @@
 import React from "react";
-// import "./Controls.css"
 import styled from "@emotion/styled";
-import { css } from "@emotion/core";
 import { colors } from "../../utils/style";
 
 interface Props {
@@ -44,12 +42,6 @@ const ControlButton = styled.button`
     }
   }
 `;
-// const leftButton = css`
-//   border-right-width: 1.5px;
-// `;
-// const rightButton = css`
-//   border-left-width: 1.5px;
-// `;
 
 const Controls: React.FC<Props> = ({
   startRecording,
@@ -62,7 +54,6 @@ const Controls: React.FC<Props> = ({
       <ControlButton
         onClick={isWavesurferPlaying ? stopSelectedAudio : playSelectedAudio}
         style={{ borderRightWidth: "1.5px" }}
-        // css={leftButton}
       >
         {isWavesurferPlaying ? (
           <svg
@@ -93,11 +84,9 @@ const Controls: React.FC<Props> = ({
           </svg>
         )}
       </ControlButton>
-      {/* <ControlButton onClick={stopSelectedAudio}>Stop Selected Audio</ControlButton> */}
       <ControlButton
         onClick={startRecording}
         style={{ borderLeftWidth: "1.5px" }}
-        // css={rightButton}
       >
         {" "}
         <svg
@@ -110,7 +99,6 @@ const Controls: React.FC<Props> = ({
           <circle cx="21" cy="21" r="21" />
         </svg>
       </ControlButton>
-      {/* <ControlButton> Stop Recording</ControlButton> */}
     </ControlsContainer>
   );
 };

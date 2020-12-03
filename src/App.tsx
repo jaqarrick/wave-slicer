@@ -11,7 +11,6 @@ import "./App.css";
 import * as WaveSurfer from "../node_modules/wavesurfer.js/dist/wavesurfer";
 import RegionsPlugin from "../node_modules/wavesurfer.js/dist/plugin/wavesurfer.regions";
 //@ts-ignore
-// import sample from "./garoto.mp3"
 import Controls from "./components/controls/Controls";
 import { SampleTimesObject, SampleData } from "./types";
 import SampleContainer from "./components/sampleContainer/SampleContainer";
@@ -21,7 +20,6 @@ import { colors } from "./utils/style";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import styled from "@emotion/styled";
-import { debounce } from "lodash";
 import InfoModal from "./components/infoModal/infoModal";
 import MobileDeviceModal from "./components/mobileDeviceModal/mobileDeviceModal";
 
@@ -65,7 +63,6 @@ const DownloadButton = styled.button`
   cursor: pointer;
 `;
 const App: React.FC = () => {
-  // const waveFormRef = useRef<HTMLDivElement | null>(null)
   const wavesurfer = useRef<any>(null);
   const [mediaRecorder, setMediaRecorder] = useState<null | MediaRecorder>(
     null
@@ -138,26 +135,14 @@ const App: React.FC = () => {
 
   const handleZoom = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      // console.log(zoomValue);
-      // console.log("change");
       setZoomValue(Number(e.target.value));
     },
-    [setZoomValue, zoomValue]
+    [setZoomValue]
   );
 
   useEffect(() => {
-    console.log(zoomValue);
-    // debounceZoom(zoomValue);
-    // console.log(zoomValue)
     wavesurfer.current.zoom(zoomValue);
   }, [zoomValue]);
-
-  // const debounceZoom = useCallback((zoomValue) => {
-  //   debounce(() => {
-  //     console.log("input");
-  //     wavesurfer.current.zoom(zoomValue);
-  //   }, 30);
-  // }, []);
 
   const [sampleTimes, setSampleTimes] = useState<SampleTimesObject>({
     start: 0,
@@ -222,7 +207,6 @@ const App: React.FC = () => {
         }
         return item;
       });
-      console.log(newSampleData);
 
       setAllSampleData(newSampleData);
     },
@@ -243,9 +227,7 @@ const App: React.FC = () => {
   const startRecording = useCallback(() => {
     if (wavesurfer.current.getDuration() > 0) {
       if (!hasRecordingStarted) {
-        console.log("recording started");
         playSelectedAudio();
-        console.log(sampleDuration);
         setHasRecordingStarted(true);
         if (mediaRecorder) {
           mediaRecorder.start();
@@ -273,10 +255,8 @@ const App: React.FC = () => {
 
   const handleDrop = useCallback(
     (e) => {
-      console.log("handleDrop");
       e.preventDefault();
       const fileURL = URL.createObjectURL(e.dataTransfer.items[0].getAsFile());
-      console.log(fileURL);
       wavesurfer.current.load(fileURL);
       wavesurfer.current.regions.clear();
       setWavesurferReady(true);
@@ -291,15 +271,12 @@ const App: React.FC = () => {
   }, [isMouseOverRegion]);
 
   const downloadSamples = useCallback(() => {
-    console.log("download samples");
     const zip = new JSZip();
     allSampleData.forEach((sample: SampleData) => {
-      console.log(sample.sampleBlob);
       zip.file(`${sample.name}.wav`, sample.sampleBlob);
     });
     zip.generateAsync({ type: "blob" }).then(function (blob) {
       saveAs(blob, "samples.zip");
-      console.log(blob);
     });
   }, [allSampleData]);
 

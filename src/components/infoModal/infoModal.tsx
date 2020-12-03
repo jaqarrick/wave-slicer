@@ -19,6 +19,10 @@ const ModalContainer = styled.div`
   padding: 3em;
   color: ${colors.dark};
   border: solid ${colors.dark} 3px;
+
+  p {
+    font-size: 1.3em;
+  }
 `;
 
 const CloseIcon = styled.div`
@@ -36,10 +40,14 @@ const InfoModal: React.FC<Props> = ({ toggleModal }) => {
     <ModalContainer>
       <CloseIcon onClick={toggleModal}>X</CloseIcon>
       <p>
-        Aenean non lorem nec mauris elementum finibus vel congue lorem. Aliquam
-        pharetra vehicula lectus, sit amet laoreet leo convallis eget. Nunc
-        mollis id ante ut mattis. Fusce dictum nunc sed gravida pharetra. Mauris
-        imperdiet consequat nunc a commodo. Suspendisse turpis neque.
+        To use Wave Slicer simply place an audio file into the drop zone. Drag
+        over the region of the waveform you want to sample and click the record
+        button. Your samples will appear underneath. Rename them whatever you
+        want! <br />
+        <br />
+        You can listen back to your samples or remove them. A download button
+        will appear at the bottom right of the screen. <br /> <br />
+        Check out the source code <a href="#">here</a>!
       </p>
     </ModalContainer>
   );
