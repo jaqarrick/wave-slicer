@@ -28,4 +28,4 @@ Start the application:
 
 Thanks to [Wavesurfer.js](https://wavesurfer-js.org/) and also [JSZip](https://stuk.github.io/jszip/) for making this project a whole lot easier to implement.
 
-Build and design by [Gabriel Davidson](https://github.com/gabrieldavison) and [Jack Carrick](https://github.com/jaqarrick).
+Build and design by [Gabriel Davison](https://github.com/gabrieldavison) and [Jack Carrick](https://github.com/jaqarrick).
