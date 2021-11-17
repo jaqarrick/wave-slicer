@@ -20,7 +20,7 @@ Navigate into the ```wave-slicer``` repo and install dependencies:
     cd wave-slicer && npm i
 Start the application:
 
-    npm run start
+    npm start
 
 ## Features to Implement
 - Add a live recorder option, where samples can be sliced from audio recorded directly in browser. 
